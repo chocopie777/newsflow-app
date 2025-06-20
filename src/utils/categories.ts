@@ -1,0 +1,20 @@
+export const categories =
+    [
+        'business', 
+        'crime', 
+        'domestic', 
+        'education', 
+        'entertainment', 
+        'environment', 
+        'food', 
+        'health', 
+        'lifestyle', 
+        'politics', 
+        'science', 
+        'sports', 
+        'technology', 
+        'top', 
+        'tourism', 
+        'world', 
+        'other'
+    ]
