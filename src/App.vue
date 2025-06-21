@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <v-navigation-drawer color="primary">
+    <v-navigation-drawer color="primary" height="25">
       <v-list-item class="py-10 text-center">
         <svg cl width="29" height="26" viewBox="0 0 29 26" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path
@@ -19,7 +19,10 @@
           <template v-slot:activator="{ props }">
             <v-list-item v-bind="props" title="Categories"></v-list-item>
           </template>
-          <v-list-item v-for="category of categories" :key="category" :title="category" @click="$router.push(`/categories/${category}`)"></v-list-item>
+          <v-list-item v-for="category of categories" :key="category" :title="category" @click="() => {
+            $router.push(`/categories/${category}`)
+            store.dispatch('getArticles', {category: route.params.category})
+          }"></v-list-item>
         </v-list-group>
       </v-list>
       <v-divider></v-divider>
@@ -28,14 +31,18 @@
       </router-link>
       <v-divider></v-divider>
     </v-navigation-drawer>
-    <v-main>
+    <v-main height="100">
       <router-view />
     </v-main>
   </v-app>
 </template>
 
 <script lang="ts" setup>
+import { useRoute } from 'vue-router';
+import { useStore } from './store';
 import { categories } from './utils/categories';
+const store = useStore()
+const route = useRoute()
 </script>
 
 <style>

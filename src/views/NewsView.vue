@@ -4,12 +4,12 @@
       <h2 class="text-center text-h3 mt-5 mb-5">News</h2>
     </v-col>
   </v-row>
-  <v-row class="mt-5 ml-5">
-    <v-col cols="6">
+  <v-row v-if="!store.state.loading" class="mt-5 ml-5">
+    <v-col offset="3" cols="6">
       <v-card height="150" class="ma-3 cursor-pointer d-flex" v-for="article of store.state.articles"
         :key="article.article_id" @click="$router.push(`/article/${article.article_id}`)">
         <v-avatar class="ma-3 align-self-center" rounded size="125">
-          <img v-if="article.image_url" :src="article.image_url" alt="image">
+          <img v-if="article.image_url" :src="article.image_url" alt="image" style="object-fit: cover; width: 100%; height: 100%;">
           <div v-else class="position-relative h-100 w-100 d-flex justify-center align-center">
             <div class="bg-black opacity-30 w-100 h-100">
             </div>
@@ -44,7 +44,15 @@
         </div>
       </v-card>
     </v-col>
+    <v-row v-if="store.state.errorMessage" class="ml-n10 mr-n10">
+      <v-col cols="12">
+        <div class="bg-red text-center py-5">{{ store.state.errorMessage }}</div>
+      </v-col>
+    </v-row>
   </v-row>
+  <div v-else class="d-flex justify-center mt-5">
+    <v-progress-circular indeterminate></v-progress-circular>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -53,7 +61,7 @@ import { onMounted } from 'vue';
 const store = useStore()
 
 onMounted(() => {
-  store.dispatch('getArticles')
+  store.dispatch('getArticles', {category: null})
 })
 </script>
 

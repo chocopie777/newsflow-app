@@ -1,6 +1,7 @@
 import { Article } from '@/types'
 import { InjectionKey } from 'vue'
 import { createStore, useStore as baseUseStore, Store } from 'vuex'
+import article, { ArticleState } from './modules/article'
 
 // define your typings for the store state
 export interface State {
@@ -8,15 +9,21 @@ export interface State {
   loading: boolean,
   errorMessage: string | null,
 }
+export type AppState = State & {article: ArticleState}
 
 // define injection key
-export const key: InjectionKey<Store<State>> = Symbol()
+export const key: InjectionKey<Store<AppState>> = Symbol()
 
 export default createStore<State>({
-  state: {
-    articles: [],
-    loading: false,
-    errorMessage: null
+  state() {
+    return {
+      articles: [],
+      loading: false,
+      errorMessage: null
+    }
+  },
+  modules: {
+    article
   },
   mutations: {
     GET_ARTICLES_REQUEST: function(state){
@@ -32,19 +39,21 @@ export default createStore<State>({
     }
   },
   actions: {
-    getArticles: async function(context) {
+    getArticles: async function(context, payload) {
       try {
         context.commit('GET_ARTICLES_REQUEST')
-        const response = await (await fetch(`https://newsdata.io/api/1/latest?apikey=${process.env.VUE_APP_API_KEY}&country=ru`)).json()
+        const response = await (await fetch(`https://newsdata.io/api/1/latest?apikey=${process.env.VUE_APP_API_KEY}&country=ru${payload.category ? `&category=${payload.category}` : ''}`)).json()
         console.log(response);
-        context.commit('GET_ARTICLES_SUCCESS', {articles: response.results})
+        
+        if(response.status === 'success') {
+          context.commit('GET_ARTICLES_SUCCESS', {articles: response.results})
+        } else {
+          context.commit('GET_ARTICLES_FAILED', {error: response.results.message})
+        }
       } catch (error) {
         context.commit('GET_ARTICLES_FAILED', {error})
       }
-    }
-    // getArticleById: async function(context, payload) {
-      
-    // }
+    },
   }
 })
 
