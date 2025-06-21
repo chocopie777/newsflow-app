@@ -35,7 +35,11 @@ export default {
       try {
         context.commit('GET_ARTICLES_REQUEST')
         const response = await (await fetch(`https://newsdata.io/api/1/latest?apikey=${process.env.VUE_APP_API_KEY}&id=${payload.id}`)).json()
-        context.commit('GET_ARTICLES_SUCCESS', { article: response.results[0] })
+        if(response.status === 'success') {
+          context.commit('GET_ARTICLES_SUCCESS', { article: response.results[0] })
+        } else {
+          context.commit('GET_ARTICLES_FAILED', {error: response.results.message})
+        }
       } catch (error) {
         context.commit('GET_ARTICLES_FAILED', { error })
       }

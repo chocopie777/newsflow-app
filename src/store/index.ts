@@ -43,8 +43,6 @@ export default createStore<State>({
       try {
         context.commit('GET_ARTICLES_REQUEST')
         const response = await (await fetch(`https://newsdata.io/api/1/latest?apikey=${process.env.VUE_APP_API_KEY}&country=ru${payload.category ? `&category=${payload.category}` : ''}`)).json()
-        console.log(response);
-        
         if(response.status === 'success') {
           context.commit('GET_ARTICLES_SUCCESS', {articles: response.results})
         } else {

@@ -1,6 +1,6 @@
 <template>
   <template v-if="!store.state.article.loading">
-    <div class="w-100 h-50 rounded-b-xl overflow-hidden">
+    <div v-if="!store.state.article.errorMessage" class="w-100 h-50 rounded-b-xl overflow-hidden">
       <img v-if="store.state.article.article?.image_url" :src="((store.state.article.article?.image_url) as string)"
         alt="image" style="object-fit: fill; width: 100%; height: 100%;">
       <div v-else class="position-relative h-100 w-100 d-flex justify-center align-center">
@@ -17,7 +17,7 @@
         </svg>
       </div>
     </div>
-    <div class="ml-5 mt-5 mr-5">
+    <div v-if="!store.state.article.errorMessage" class="ml-5 mt-5 mr-5">
       <hr>
       <div class="mb-5 mt-5 flex">
         <div class="d-flex justify-space-between">
@@ -37,6 +37,11 @@
         {{ store.state.article.article?.description }}
       </p>
     </div>
+    <v-row v-if="store.state.article.errorMessage" class="ml-n10 mr-n10 mt-10">
+      <v-col cols="12">
+        <div class="bg-red text-center py-5">{{ store.state.article.errorMessage }}</div>
+      </v-col>
+    </v-row>
   </template>
   <div v-else class="d-flex justify-center mt-5">
     <v-progress-circular indeterminate></v-progress-circular>
@@ -50,7 +55,7 @@ import { useRoute } from 'vue-router';
 const route = useRoute()
 const store = useStore()
 onMounted(() => {
-    store.dispatch('article/getArticleById', {id: route.params.id})
+  store.dispatch('article/getArticleById', { id: route.params.id })
 })
 </script>
 
