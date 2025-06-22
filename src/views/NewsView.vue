@@ -5,11 +5,12 @@
     </v-col>
   </v-row>
   <v-row v-if="!store.state.loading" class="mt-5 ml-5">
-    <v-col offset="3" cols="6">
-      <v-card height="150" class="ma-3 cursor-pointer d-flex" v-for="article of store.state.articles"
+    <v-col v-if="store.state.articles.length > 0" offset="3" cols="6">
+      <v-card :ripple="false" height="150" class="ma-3 cursor-pointer d-flex" v-for="article of store.state.articles"
         :key="article.article_id" @click="$router.push(`/article/${article.article_id}`)">
         <v-avatar class="ma-3 align-self-center" rounded size="125">
-          <img v-if="article.image_url" :src="article.image_url" alt="image" style="object-fit: cover; width: 100%; height: 100%;">
+          <img v-if="article.image_url" :src="article.image_url" alt="image"
+            style="object-fit: cover; width: 100%; height: 100%;">
           <div v-else class="position-relative h-100 w-100 d-flex justify-center align-center">
             <div class="bg-black opacity-30 w-100 h-100">
             </div>
@@ -26,9 +27,27 @@
         </v-avatar>
         <div class="flex-grow-1 justify-space-between flex-column d-flex" style="min-width: 0; overflow: hidden;">
           <div>
-            <v-card-title class="text-wrap text-truncate">
-              {{ article.title }}
-            </v-card-title>
+            <div class="position-relative">
+              <v-card-title class="text-wrap text-truncate" style="padding-right: 50px;">
+                {{ article.title }}
+              </v-card-title>
+              <button v-if="favorites.some(obj => obj.article_id === article.article_id)" class="position-absolute" style="top: 10px; right: 10px; z-index: 10;"
+                @click.stop="favoriteHandler(article)">
+                <svg width="22" height="30" viewBox="0 0 14 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path
+                    d="M12.3333 0.333374H1.66659C1.31296 0.333374 0.973826 0.47385 0.723777 0.723898C0.473728 0.973947 0.333252 1.31309 0.333252 1.66671V20.2867C0.333041 20.551 0.411364 20.8093 0.558275 21.029C0.705186 21.2487 0.91406 21.4197 1.15838 21.5204C1.40269 21.6212 1.67143 21.647 1.93047 21.5947C2.1895 21.5424 2.42716 21.4143 2.61325 21.2267L6.97325 16.88L11.3933 21.28C11.5801 21.4658 11.8178 21.592 12.0763 21.6428C12.3348 21.6935 12.6026 21.6666 12.8458 21.5653C13.089 21.464 13.2968 21.293 13.4429 21.0737C13.5889 20.8544 13.6668 20.5968 13.6666 20.3334V1.66671C13.6666 1.31309 13.5261 0.973947 13.2761 0.723898C13.026 0.47385 12.6869 0.333374 12.3333 0.333374Z"
+                    class="selected-color" />
+                </svg>
+              </button>
+              <button v-else class="position-absolute" style="top: 10px; right: 10px; z-index: 10;"
+                @click.stop="favoriteHandler(article)">
+                <svg width="22" height="30" viewBox="0 0 14 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path
+                    d="M12.3333 0.333374H1.66659C1.31296 0.333374 0.973826 0.47385 0.723777 0.723898C0.473728 0.973947 0.333252 1.31309 0.333252 1.66671V20.2867C0.333041 20.551 0.411364 20.8093 0.558275 21.029C0.705186 21.2487 0.91406 21.4197 1.15838 21.5204C1.40269 21.6212 1.67143 21.647 1.93047 21.5947C2.1895 21.5424 2.42716 21.4143 2.61325 21.2267L6.97325 16.88L11.3933 21.28C11.5801 21.4658 11.8178 21.592 12.0763 21.6428C12.3348 21.6935 12.6026 21.6666 12.8458 21.5653C13.089 21.464 13.2968 21.293 13.4429 21.0737C13.5889 20.8544 13.6668 20.5968 13.6666 20.3334V1.66671C13.6666 1.31309 13.5261 0.973947 13.2761 0.723898C13.026 0.47385 12.6869 0.333374 12.3333 0.333374Z"
+                    class="unselected-color" />
+                </svg>
+              </button>
+            </div>
             <v-card-subtitle class="text-wrap text-truncate">
               {{ article.description }}
             </v-card-subtitle>
@@ -57,12 +76,49 @@
 
 <script setup lang="ts">
 import { useStore } from '@/store';
-import { onMounted } from 'vue';
+import { Article } from '@/types';
+import { onMounted, ref } from 'vue';
 const store = useStore()
+const favorites = ref<Article[]>([])
 
 onMounted(() => {
-  store.dispatch('getArticles', {category: null})
+  store.dispatch('getArticles', { category: null })
+  if (localStorage.getItem('favorites')) {
+    favorites.value = JSON.parse(localStorage.getItem('favorites') || '[]')
+  }
 })
+
+function favoriteHandler(data: Article) {
+  try {
+    if (localStorage.getItem('favorites')) {
+      favorites.value = JSON.parse(localStorage.getItem('favorites') || '[]')
+      // Если фильм есть в избранном, то удалить. Иначе добавить в избранное
+      if (favorites.value.some(obj => obj.article_id === data.article_id)) {
+        const index = favorites.value.findIndex(obj => obj.article_id === data.article_id)
+        if (index !== -1) {
+          favorites.value.splice(index, 1)
+        }
+      } else {
+        favorites.value.unshift(data)
+      }
+
+      localStorage.setItem('favorites', JSON.stringify(favorites.value))
+    } else {
+      favorites.value.unshift(data)
+      localStorage.setItem('favorites', JSON.stringify([data]))
+    }
+  } catch (e) {
+    console.log(e)
+  }
+}
 </script>
 
-<style scoped></style>
+<style scoped>
+.selected-color {
+  fill: rgb(var(--v-theme-primary))
+}
+
+.unselected-color {
+  fill: #414B5A;
+}
+</style>

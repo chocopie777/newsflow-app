@@ -32,9 +32,11 @@ export default createStore<State>({
     GET_ARTICLES_SUCCESS: function(state, payload){
       state.loading = false
       state.articles = payload.articles
+      state.errorMessage = null
     },
     GET_ARTICLES_FAILED: function(state, payload){
       state.loading = false
+      state.articles = []
       state.errorMessage = payload.error
     }
   },

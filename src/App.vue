@@ -19,10 +19,7 @@
           <template v-slot:activator="{ props }">
             <v-list-item v-bind="props" title="Categories"></v-list-item>
           </template>
-          <v-list-item v-for="category of categories" :key="category" :title="category" @click="() => {
-            $router.push(`/categories/${category}`)
-            store.dispatch('getArticles', {category: route.params.category})
-          }"></v-list-item>
+          <v-list-item v-for="category of categories" :key="category" :title="category" @click="$router.push(`/categories/${category}`)"></v-list-item>
         </v-list-group>
       </v-list>
       <v-divider></v-divider>
@@ -38,11 +35,7 @@
 </template>
 
 <script lang="ts" setup>
-import { useRoute } from 'vue-router';
-import { useStore } from './store';
 import { categories } from './utils/categories';
-const store = useStore()
-const route = useRoute()
 </script>
 
 <style>

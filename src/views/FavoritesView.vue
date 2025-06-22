@@ -2,14 +2,112 @@
   <v-row>
     <v-col cols="12">
       <h2 class="text-center text-h3 mt-5 mb-5">Favorites</h2>
+      <v-row>
+        <v-col offset="3" cols="6">
+          <div v-if="favorites.length > 0">
+            <v-card :ripple="false" height="150" class="ma-3 cursor-pointer d-flex"
+              v-for="article of favorites" :key="article.article_id"
+              @click="$router.push(`/article/${article.article_id}`)">
+              <v-avatar class="ma-3 align-self-center" rounded size="125">
+                <img v-if="article.image_url" :src="article.image_url" alt="image"
+                  style="object-fit: cover; width: 100%; height: 100%;">
+                <div v-else class="position-relative h-100 w-100 d-flex justify-center align-center">
+                  <div class="bg-black opacity-30 w-100 h-100">
+                  </div>
+                  <svg class="w-50 position-absolute" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                    <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                    <g id="SVGRepo_iconCarrier">
+                      <path
+                        d="M4.27209 20.7279L10.8686 14.1314C11.2646 13.7354 11.4627 13.5373 11.691 13.4632C11.8918 13.3979 12.1082 13.3979 12.309 13.4632C12.5373 13.5373 12.7354 13.7354 13.1314 14.1314L19.6839 20.6839M14 15L16.8686 12.1314C17.2646 11.7354 17.4627 11.5373 17.691 11.4632C17.8918 11.3979 18.1082 11.3979 18.309 11.4632C18.5373 11.5373 18.7354 11.7354 19.1314 12.1314L22 15M10 9C10 10.1046 9.10457 11 8 11C6.89543 11 6 10.1046 6 9C6 7.89543 6.89543 7 8 7C9.10457 7 10 7.89543 10 9ZM6.8 21H17.2C18.8802 21 19.7202 21 20.362 20.673C20.9265 20.3854 21.3854 19.9265 21.673 19.362C22 18.7202 22 17.8802 22 16.2V7.8C22 6.11984 22 5.27976 21.673 4.63803C21.3854 4.07354 20.9265 3.6146 20.362 3.32698C19.7202 3 18.8802 3 17.2 3H6.8C5.11984 3 4.27976 3 3.63803 3.32698C3.07354 3.6146 2.6146 4.07354 2.32698 4.63803C2 5.27976 2 6.11984 2 7.8V16.2C2 17.8802 2 18.7202 2.32698 19.362C2.6146 19.9265 3.07354 20.3854 3.63803 20.673C4.27976 21 5.11984 21 6.8 21Z"
+                        stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                    </g>
+                  </svg>
+                </div>
+              </v-avatar>
+              <div class="flex-grow-1 justify-space-between flex-column d-flex" style="min-width: 0; overflow: hidden;">
+                <div>
+                  <div class="position-relative">
+                    <v-card-title class="text-wrap text-truncate" style="padding-right: 50px;">
+                      {{ article.title }}
+                    </v-card-title>
+                    <button v-if="favorites.some(obj => obj.article_id === article.article_id)" class="position-absolute"
+                      style="top: 10px; right: 10px; z-index: 10;" @click.stop="favoriteHandler(article)">
+                      <svg width="22" height="30" viewBox="0 0 14 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path
+                          d="M12.3333 0.333374H1.66659C1.31296 0.333374 0.973826 0.47385 0.723777 0.723898C0.473728 0.973947 0.333252 1.31309 0.333252 1.66671V20.2867C0.333041 20.551 0.411364 20.8093 0.558275 21.029C0.705186 21.2487 0.91406 21.4197 1.15838 21.5204C1.40269 21.6212 1.67143 21.647 1.93047 21.5947C2.1895 21.5424 2.42716 21.4143 2.61325 21.2267L6.97325 16.88L11.3933 21.28C11.5801 21.4658 11.8178 21.592 12.0763 21.6428C12.3348 21.6935 12.6026 21.6666 12.8458 21.5653C13.089 21.464 13.2968 21.293 13.4429 21.0737C13.5889 20.8544 13.6668 20.5968 13.6666 20.3334V1.66671C13.6666 1.31309 13.5261 0.973947 13.2761 0.723898C13.026 0.47385 12.6869 0.333374 12.3333 0.333374Z"
+                          class="selected-color" />
+                      </svg>
+                    </button>
+                    <button v-else class="position-absolute" style="top: 10px; right: 10px; z-index: 10;"
+                      @click.stop="favoriteHandler(article)">
+                      <svg width="22" height="30" viewBox="0 0 14 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path
+                          d="M12.3333 0.333374H1.66659C1.31296 0.333374 0.973826 0.47385 0.723777 0.723898C0.473728 0.973947 0.333252 1.31309 0.333252 1.66671V20.2867C0.333041 20.551 0.411364 20.8093 0.558275 21.029C0.705186 21.2487 0.91406 21.4197 1.15838 21.5204C1.40269 21.6212 1.67143 21.647 1.93047 21.5947C2.1895 21.5424 2.42716 21.4143 2.61325 21.2267L6.97325 16.88L11.3933 21.28C11.5801 21.4658 11.8178 21.592 12.0763 21.6428C12.3348 21.6935 12.6026 21.6666 12.8458 21.5653C13.089 21.464 13.2968 21.293 13.4429 21.0737C13.5889 20.8544 13.6668 20.5968 13.6666 20.3334V1.66671C13.6666 1.31309 13.5261 0.973947 13.2761 0.723898C13.026 0.47385 12.6869 0.333374 12.3333 0.333374Z"
+                          class="unselected-color" />
+                      </svg>
+                    </button>
+                  </div>
+                  <v-card-subtitle class="text-wrap text-truncate">
+                    {{ article.description }}
+                  </v-card-subtitle>
+                </div>
+                <div class="d-flex justify-space-between">
+                  <v-card-text class="font-weight-bold">
+                    {{ article.source_name }}
+                  </v-card-text>
+                  <v-card-text class="text-right font-weight-bold">
+                    {{ article.pubDate }}
+                  </v-card-text>
+                </div>
+              </div>
+            </v-card>
+          </div>
+          <v-row v-else>
+            <v-col offset="3" cols="6">
+              <div class="text-center mt-5">Список избранных пуст</div>
+            </v-col>
+          </v-row>
+        </v-col>
+      </v-row>
     </v-col>
   </v-row>
 </template>
 
 <script setup lang="ts">
+import { Article } from '@/types';
+import { onMounted, ref } from 'vue';
 
+const favorites = ref<Article[]>([])
+
+onMounted(() => {
+  if (localStorage.getItem('favorites') && favorites.value.length === 0) {
+    favorites.value = JSON.parse(localStorage.getItem('favorites') || '[]')
+  }
+})
+
+function favoriteHandler(data: Article) {
+  try {
+    favorites.value = JSON.parse(localStorage.getItem('favorites') || '[]')
+
+    const index = favorites.value.findIndex(obj => obj.article_id === data.article_id)
+    if(index !== -1) {
+      favorites.value.splice(index, 1)
+    }
+
+    localStorage.setItem('favorites', JSON.stringify(favorites.value))
+  } catch (e) {
+    console.log(e)
+  }
+}
 </script>
 
 <style scoped>
+.selected-color {
+  fill: rgb(var(--v-theme-primary))
+}
 
+.unselected-color {
+  fill: #414B5A;
+}
 </style>

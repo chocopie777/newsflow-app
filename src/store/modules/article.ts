@@ -24,6 +24,7 @@ export default {
     GET_ARTICLES_SUCCESS: function (state: ArticleState, payload: {article: Article}) {
       state.loading = false
       state.article = payload.article
+      state.errorMessage = null
     },
     GET_ARTICLES_FAILED: function (state: ArticleState, payload: {error: string | null}) {
       state.loading = false
