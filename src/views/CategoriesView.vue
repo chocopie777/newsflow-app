@@ -1,9 +1,4 @@
 <template>
-  <v-row>
-    <v-col cols="12">
-      <h2 class="text-center text-h3 mt-5 mb-5 text-capitalize">{{ $route.params.category }} News</h2>
-    </v-col>
-  </v-row>
   <v-row v-if="!store.state.loading" class="mt-5 ml-5 mr-5">
     <v-col v-if="store.state.articles.length > 0" offset="3" cols="6">
       <v-card :ripple="false" height="150" class="ma-3 cursor-pointer d-flex" v-for="article of store.state.articles"
@@ -67,7 +62,7 @@
     </v-col>
     <v-row v-if="store.state.errorMessage" class="ml-n10 mr-n10">
       <v-col cols="12">
-        <div class="bg-red text-center py-5">{{ store.state.errorMessage }}</div>
+        <div class="bg-red text-center py-5">Допустимо 30 запросов к api в течении 15 минут(200 запросов в день) {{ store.state.errorMessage }}</div>
       </v-col>
     </v-row>
   </v-row>
@@ -81,12 +76,20 @@ import { useStore } from '@/store';
 import { Article } from '@/types';
 import { onMounted, ref, watch } from 'vue';
 import { useRoute } from 'vue-router';
+import { defineProps } from "vue";
 const store = useStore()
 const route = useRoute()
 const favorites = ref<Article[]>([])
 
+const props = defineProps({
+  changeAppBarTitle: {type: Function, required: true}
+})
+
+props.changeAppBarTitle(route.params.category + ' News')
+
 watch(() => route.params.category, () => {
   store.dispatch('getArticles', {category: route.params.category})
+  props.changeAppBarTitle(route.params.category + ' News')
 })
 
 onMounted(() => {

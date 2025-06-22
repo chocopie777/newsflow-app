@@ -1,10 +1,5 @@
 <template>
-  <v-row>
-    <v-col cols="12">
-      <h2 class="text-center text-h3 mt-5 mb-5">News</h2>
-    </v-col>
-  </v-row>
-  <v-row v-if="!store.state.loading" class="mt-5 ml-5">
+  <v-row v-if="!store.state.loading" class="mt-5 ml-5 mr-5">
     <v-col v-if="store.state.articles.length > 0" offset="3" cols="6">
       <v-card :ripple="false" height="150" class="ma-3 cursor-pointer d-flex" v-for="article of store.state.articles"
         :key="article.article_id" @click="$router.push(`/article/${article.article_id}`)">
@@ -31,8 +26,8 @@
               <v-card-title class="text-wrap text-truncate" style="padding-right: 50px;">
                 {{ article.title }}
               </v-card-title>
-              <button v-if="favorites.some(obj => obj.article_id === article.article_id)" class="position-absolute" style="top: 10px; right: 10px; z-index: 10;"
-                @click.stop="favoriteHandler(article)">
+              <button v-if="favorites.some(obj => obj.article_id === article.article_id)" class="position-absolute"
+                style="top: 10px; right: 10px; z-index: 10;" @click.stop="favoriteHandler(article)">
                 <svg width="22" height="30" viewBox="0 0 14 22" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <path
                     d="M12.3333 0.333374H1.66659C1.31296 0.333374 0.973826 0.47385 0.723777 0.723898C0.473728 0.973947 0.333252 1.31309 0.333252 1.66671V20.2867C0.333041 20.551 0.411364 20.8093 0.558275 21.029C0.705186 21.2487 0.91406 21.4197 1.15838 21.5204C1.40269 21.6212 1.67143 21.647 1.93047 21.5947C2.1895 21.5424 2.42716 21.4143 2.61325 21.2267L6.97325 16.88L11.3933 21.28C11.5801 21.4658 11.8178 21.592 12.0763 21.6428C12.3348 21.6935 12.6026 21.6666 12.8458 21.5653C13.089 21.464 13.2968 21.293 13.4429 21.0737C13.5889 20.8544 13.6668 20.5968 13.6666 20.3334V1.66671C13.6666 1.31309 13.5261 0.973947 13.2761 0.723898C13.026 0.47385 12.6869 0.333374 12.3333 0.333374Z"
@@ -65,7 +60,7 @@
     </v-col>
     <v-row v-if="store.state.errorMessage" class="ml-n10 mr-n10">
       <v-col cols="12">
-        <div class="bg-red text-center py-5">{{ store.state.errorMessage }}</div>
+        <div class="bg-red text-center py-5">Допустимо 30 запросов к api в течении 15 минут(200 запросов в день) {{ store.state.errorMessage }}</div>
       </v-col>
     </v-row>
   </v-row>
@@ -78,8 +73,15 @@
 import { useStore } from '@/store';
 import { Article } from '@/types';
 import { onMounted, ref } from 'vue';
+import { defineProps } from "vue";
 const store = useStore()
 const favorites = ref<Article[]>([])
+
+const props = defineProps({
+  changeAppBarTitle: {type:Function, required: true}
+})
+
+props.changeAppBarTitle('News')
 
 onMounted(() => {
   store.dispatch('getArticles', { category: null })

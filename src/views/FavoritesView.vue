@@ -1,7 +1,6 @@
 <template>
   <v-row>
     <v-col cols="12">
-      <h2 class="text-center text-h3 mt-5 mb-5">Favorites</h2>
       <v-row>
         <v-col offset="3" cols="6">
           <div v-if="favorites.length > 0">
@@ -77,8 +76,15 @@
 <script setup lang="ts">
 import { Article } from '@/types';
 import { onMounted, ref } from 'vue';
+import { defineProps } from "vue";
 
 const favorites = ref<Article[]>([])
+
+const props = defineProps({
+  changeAppBarTitle: {type: Function, required: true}
+})
+
+props.changeAppBarTitle('Favorites')
 
 onMounted(() => {
   if (localStorage.getItem('favorites') && favorites.value.length === 0) {

@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <v-navigation-drawer color="primary" height="25">
+    <v-navigation-drawer color="primary" height="25" v-model="drawer">
       <v-list-item class="py-10 text-center">
         <svg cl width="29" height="26" viewBox="0 0 29 26" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path
@@ -29,13 +29,27 @@
       <v-divider></v-divider>
     </v-navigation-drawer>
     <v-main height="100">
-      <router-view />
+       <v-app-bar :elevation="2" color="primary">
+        <template v-slot:prepend>
+          <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
+        </template>
+
+        <v-app-bar-title class="text-capitalize">{{appBarTitle}}</v-app-bar-title>
+      </v-app-bar>
+      <router-view :change-app-bar-title="changeAppBarTitle"/>
     </v-main>
   </v-app>
 </template>
 
 <script lang="ts" setup>
+import { ref } from 'vue';
 import { categories } from './utils/categories';
+const appBarTitle = ref('');
+const drawer = ref(true)
+
+function changeAppBarTitle(newTitle: string) {
+  appBarTitle.value = newTitle
+}
 </script>
 
 <style>
