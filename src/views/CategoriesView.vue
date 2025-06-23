@@ -82,18 +82,20 @@ const route = useRoute()
 const favorites = ref<Article[]>([])
 
 const props = defineProps({
-  changeAppBarTitle: {type: Function, required: true}
+  changeAppBarTitle: {type: Function, required: true},
+  changeIsBackArrow: {type:Function, required: true}
 })
 
 props.changeAppBarTitle(route.params.category + ' News')
+props.changeIsBackArrow(false)
 
 watch(() => route.params.category, () => {
-  store.dispatch('getArticles', {category: route.params.category})
+  store.dispatch('getArticles', {category: route.params.category, q: null})
   props.changeAppBarTitle(route.params.category + ' News')
 })
 
 onMounted(() => {
-  store.dispatch('getArticles', {category: route.params.category})
+  store.dispatch('getArticles', {category: route.params.category, q: null})
   if (localStorage.getItem('favorites')) {
     favorites.value = JSON.parse(localStorage.getItem('favorites') || '[]')
   }

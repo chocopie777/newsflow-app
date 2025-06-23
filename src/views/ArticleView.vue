@@ -60,10 +60,20 @@
 import { useStore } from '@/store';
 import { onMounted } from 'vue';
 import { useRoute } from 'vue-router';
+import { defineProps } from "vue";
 const route = useRoute()
 const store = useStore()
-onMounted(() => {
-  store.dispatch('article/getArticleById', { id: route.params.id })
+
+const props = defineProps({
+  changeAppBarTitle: { type: Function, required: true },
+  changeIsBackArrow: {type:Function, required: true}
+})
+
+props.changeIsBackArrow(true)
+
+onMounted(async () => {
+  await store.dispatch('article/getArticleById', { id: route.params.id })
+  await props.changeAppBarTitle(store.state.article.article?.title)
 })
 </script>
 

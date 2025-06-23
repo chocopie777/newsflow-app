@@ -78,13 +78,15 @@ const store = useStore()
 const favorites = ref<Article[]>([])
 
 const props = defineProps({
-  changeAppBarTitle: {type:Function, required: true}
+  changeAppBarTitle: {type:Function, required: true},
+  changeIsBackArrow: {type:Function, required: true}
 })
 
-props.changeAppBarTitle('News')
+props.changeAppBarTitle('Last News')
+props.changeIsBackArrow(false)
 
 onMounted(() => {
-  store.dispatch('getArticles', { category: null })
+  store.dispatch('getArticles', { category: null, q: null })
   if (localStorage.getItem('favorites')) {
     favorites.value = JSON.parse(localStorage.getItem('favorites') || '[]')
   }

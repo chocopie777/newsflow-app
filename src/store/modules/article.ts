@@ -28,8 +28,9 @@ export default {
     },
     GET_ARTICLES_FAILED: function (state: ArticleState, payload: {error: string | null}) {
       state.loading = false
+      state.article = null
       state.errorMessage = payload.error
-    }
+    },
   },
   actions: {
     getArticleById: async function (context: ActionContext<ArticleState, State>, payload: {id: string}) {

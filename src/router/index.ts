@@ -3,6 +3,7 @@ import CategoriesView from '@/views/CategoriesView.vue'
 import FavoritesView from '@/views/FavoritesView.vue'
 import NewsView from '../views/NewsView.vue'
 import ArticleView from '@/views/ArticleView.vue'
+import SearchView from '@/views/SearchView.vue'
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -28,6 +29,11 @@ const routes: Array<RouteRecordRaw> = [
     path: '/article/:id',
     name: 'article',
     component: ArticleView
+  },
+  {
+    path: '/search',
+    name: 'search',
+    component: SearchView
   },
 ]
 

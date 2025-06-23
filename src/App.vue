@@ -11,7 +11,11 @@
       </v-list-item>
       <v-divider></v-divider>
       <router-link to="/news" custom v-slot="{ navigate }">
-        <v-list-item link title="News" @click="(e) => navigate()"></v-list-item>
+        <v-list-item link title="Last News" @click="(e) => navigate()"></v-list-item>
+      </router-link>
+      <v-divider></v-divider>
+      <router-link to="/search" custom v-slot="{ navigate }">
+        <v-list-item link title="Search for keywords" @click="(e) => navigate()"></v-list-item>
       </router-link>
       <v-divider></v-divider>
       <v-list class="p-0" density="compact">
@@ -19,7 +23,8 @@
           <template v-slot:activator="{ props }">
             <v-list-item v-bind="props" title="Categories"></v-list-item>
           </template>
-          <v-list-item v-for="category of categories" :key="category" :title="category" @click="$router.push(`/categories/${category}`)"></v-list-item>
+          <v-list-item v-for="category of categories" :key="category" :title="category"
+            @click="$router.push(`/categories/${category}`)"></v-list-item>
         </v-list-group>
       </v-list>
       <v-divider></v-divider>
@@ -29,14 +34,16 @@
       <v-divider></v-divider>
     </v-navigation-drawer>
     <v-main height="100">
-       <v-app-bar :elevation="2" color="primary">
+      <v-app-bar :elevation="2" color="primary">
         <template v-slot:prepend>
+          <v-btn v-if="isBackArrow" class="ma-2" @click="router.go(-1)">
+            <v-icon size="x-large" icon="mdi-arrow-left" start></v-icon>
+          </v-btn>
           <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
         </template>
-
-        <v-app-bar-title class="text-capitalize">{{appBarTitle}}</v-app-bar-title>
+        <v-app-bar-title class="text-capitalize">{{ appBarTitle }}</v-app-bar-title>
       </v-app-bar>
-      <router-view :change-app-bar-title="changeAppBarTitle"/>
+      <router-view :change-app-bar-title="changeAppBarTitle" :change-is-back-arrow="changeIsBackArrow"/>
     </v-main>
   </v-app>
 </template>
@@ -44,11 +51,19 @@
 <script lang="ts" setup>
 import { ref } from 'vue';
 import { categories } from './utils/categories';
+import { useRouter } from 'vue-router';
+const router = useRouter()
 const appBarTitle = ref('');
 const drawer = ref(true)
+const isBackArrow = ref(false)
+
 
 function changeAppBarTitle(newTitle: string) {
   appBarTitle.value = newTitle
+}
+
+function changeIsBackArrow(value: boolean) {
+  isBackArrow.value = value
 }
 </script>
 

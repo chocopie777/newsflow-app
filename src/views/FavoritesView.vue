@@ -81,10 +81,12 @@ import { defineProps } from "vue";
 const favorites = ref<Article[]>([])
 
 const props = defineProps({
-  changeAppBarTitle: {type: Function, required: true}
+  changeAppBarTitle: {type: Function, required: true},
+  changeIsBackArrow: {type:Function, required: true}
 })
 
 props.changeAppBarTitle('Favorites')
+props.changeIsBackArrow(false)
 
 onMounted(() => {
   if (localStorage.getItem('favorites') && favorites.value.length === 0) {
