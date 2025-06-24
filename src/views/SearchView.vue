@@ -8,7 +8,7 @@
     </v-row>
     <v-row>
       <v-col offset="3" cols="6">
-        <v-card :ripple="false" height="150" class="ma-3 cursor-pointer d-flex" v-for="article of store.state.articles"
+        <v-card :ripple="false" height="150" class="ma-3 cursor-pointer d-flex" v-for="article of store.state.searchNews.articles"
           :key="article.article_id" @click="$router.push(`/article/${article.article_id}`)">
           <v-avatar class="ma-3 align-self-center" rounded size="125">
             <img v-if="article.image_url" :src="article.image_url" alt="image"
@@ -67,6 +67,11 @@
         </v-card>
       </v-col>
     </v-row>
+    <v-row v-if="store.state.searchNews.errorMessage" class="ml-n10 mr-n10">
+      <v-col cols="12">
+        <div class="bg-red text-center py-5">Допустимо 30 запросов к api в течении 15 минут(200 запросов в день) {{ store.state.searchNews.errorMessage }}</div>
+      </v-col>
+    </v-row>
   </div>
 </template>
 
@@ -77,8 +82,6 @@ import { defineProps, ref } from "vue";
 const store = useStore()
 const favorites = ref<Article[]>([])
 const searchValue = ref('')
-
-store.commit('CLEAR_ARTICLES')
 
 if (localStorage.getItem('favorites')) {
   favorites.value = JSON.parse(localStorage.getItem('favorites') || '[]')
@@ -117,7 +120,7 @@ function favoriteHandler(data: Article) {
 }
 
 function searchHandler() {
-  store.dispatch('getArticles', { category: null, q: searchValue.value })
+  store.dispatch('searchNews/getArticles', { q: searchValue.value })
 }
 </script>
 

@@ -44,6 +44,11 @@
         <v-app-bar-title class="text-capitalize">{{ appBarTitle }}</v-app-bar-title>
       </v-app-bar>
       <router-view :change-app-bar-title="changeAppBarTitle" :change-is-back-arrow="changeIsBackArrow"/>
+      <!-- <router-view :change-app-bar-title="changeAppBarTitle" :change-is-back-arrow="changeIsBackArrow"  v-slot="{ Component }">
+        <keep-alive exclude="ArticleView">
+          <component :is="Component" />
+        </keep-alive>
+      </router-view> -->
     </v-main>
   </v-app>
 </template>

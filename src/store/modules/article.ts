@@ -1,6 +1,6 @@
 import { Article } from "@/types"
 import { ActionContext, Module } from "vuex"
-import { State } from ".."
+import { AppState } from ".."
 
 export interface ArticleState {
   article: Article | null,
@@ -33,7 +33,7 @@ export default {
     },
   },
   actions: {
-    getArticleById: async function (context: ActionContext<ArticleState, State>, payload: {id: string}) {
+    getArticleById: async function (context: ActionContext<ArticleState, AppState>, payload: {id: string}) {
       try {
         context.commit('GET_ARTICLES_REQUEST')
         const response = await (await fetch(`https://newsdata.io/api/1/latest?apikey=${process.env.VUE_APP_API_KEY}&id=${payload.id}`)).json()
@@ -47,4 +47,4 @@ export default {
       }
     }
   }
-} as Module<ArticleState, State>
+} as Module<ArticleState, AppState>

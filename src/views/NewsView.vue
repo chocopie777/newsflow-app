@@ -1,7 +1,7 @@
 <template>
-  <v-row v-if="!store.state.loading" class="mt-5 ml-5 mr-5">
-    <v-col v-if="store.state.articles.length > 0" offset="3" cols="6">
-      <v-card :ripple="false" height="150" class="ma-3 cursor-pointer d-flex" v-for="article of store.state.articles"
+  <v-row v-if="!store.state.lastNews.loading" class="mt-5 ml-5 mr-5">
+    <v-col v-if="store.state.lastNews.articles.length > 0" offset="3" cols="6">
+      <v-card :ripple="false" height="150" class="ma-3 cursor-pointer d-flex" v-for="article of store.state.lastNews.articles"
         :key="article.article_id" @click="$router.push(`/article/${article.article_id}`)">
         <v-avatar class="ma-3 align-self-center" rounded size="125">
           <img v-if="article.image_url" :src="article.image_url" alt="image"
@@ -58,9 +58,9 @@
         </div>
       </v-card>
     </v-col>
-    <v-row v-if="store.state.errorMessage" class="ml-n10 mr-n10">
+    <v-row v-if="store.state.lastNews.errorMessage" class="ml-n10 mr-n10">
       <v-col cols="12">
-        <div class="bg-red text-center py-5">Допустимо 30 запросов к api в течении 15 минут(200 запросов в день) {{ store.state.errorMessage }}</div>
+        <div class="bg-red text-center py-5">Допустимо 30 запросов к api в течении 15 минут(200 запросов в день) {{ store.state.lastNews.errorMessage }}</div>
       </v-col>
     </v-row>
   </v-row>
@@ -86,7 +86,7 @@ props.changeAppBarTitle('Last News')
 props.changeIsBackArrow(false)
 
 onMounted(() => {
-  store.dispatch('getArticles', { category: null, q: null })
+  store.dispatch('lastNews/getArticles')
   if (localStorage.getItem('favorites')) {
     favorites.value = JSON.parse(localStorage.getItem('favorites') || '[]')
   }
