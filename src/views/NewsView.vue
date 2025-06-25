@@ -60,7 +60,7 @@
     </v-col>
     <v-row v-if="store.state.lastNews.errorMessage" class="ml-n10 mr-n10">
       <v-col cols="12">
-        <div class="bg-red text-center py-5">Допустимо 30 запросов к api в течении 15 минут(200 запросов в день) {{ store.state.lastNews.errorMessage }}</div>
+        <div class="bg-red text-center py-5 px-10">Допустимо 30 запросов к api в течении 15 минут(200 запросов в день) {{ store.state.lastNews.errorMessage }}</div>
       </v-col>
     </v-row>
   </v-row>

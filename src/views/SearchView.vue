@@ -6,7 +6,7 @@
         <v-btn class="mr-3" color="primary ml-5" style="height:55px" @click="searchHandler">search</v-btn>
       </v-col>
     </v-row>
-    <v-row>
+    <v-row v-if="!store.state.searchNews.loading">
       <v-col offset="0" cols="12" sm="10" offset-sm="1" md="8" offset-md="2" lg="6" offset-lg="3">
         <v-card :ripple="false" height="150" class="ma-3 cursor-pointer d-flex" v-for="article of store.state.searchNews.articles"
           :key="article.article_id" @click="$router.push(`/article/${article.article_id}`)">
@@ -67,9 +67,12 @@
         </v-card>
       </v-col>
     </v-row>
+    <div v-else class="d-flex justify-center mt-5">
+    <v-progress-circular indeterminate></v-progress-circular>
+    </div>
     <v-row v-if="store.state.searchNews.errorMessage" class="ml-n10 mr-n10">
       <v-col cols="12">
-        <div class="bg-red text-center py-5">Допустимо 30 запросов к api в течении 15 минут(200 запросов в день) {{ store.state.searchNews.errorMessage }}</div>
+        <div class="bg-red text-center py-5 px-10">Допустимо 30 запросов к api в течении 15 минут(200 запросов в день) {{ store.state.searchNews.errorMessage }}</div>
       </v-col>
     </v-row>
   </div>
