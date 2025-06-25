@@ -85,10 +85,9 @@ const props = defineProps({
   changeIsBackArrow: {type:Function, required: true}
 })
 
-props.changeAppBarTitle('Favorites')
-props.changeIsBackArrow(false)
-
 onMounted(() => {
+  props.changeAppBarTitle('Favorites')
+  props.changeIsBackArrow(false)
   if (localStorage.getItem('favorites') && favorites.value.length === 0) {
     favorites.value = JSON.parse(localStorage.getItem('favorites') || '[]')
   }
