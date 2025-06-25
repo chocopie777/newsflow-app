@@ -33,7 +33,7 @@
       </router-link>
       <v-divider></v-divider>
     </v-navigation-drawer>
-    <v-main height="100">
+    <v-main class="overflow-hidden">
       <v-app-bar :elevation="2" color="primary">
         <template v-slot:prepend>
           <v-btn v-if="isBackArrow" class="ma-2" @click="router.go(-1)">
@@ -43,7 +43,6 @@
         </template>
         <v-app-bar-title class="text-capitalize">{{ appBarTitle }}</v-app-bar-title>
       </v-app-bar>
-      <!-- <router-view :change-app-bar-title="changeAppBarTitle" :change-is-back-arrow="changeIsBackArrow"/> -->
       <router-view :change-app-bar-title="changeAppBarTitle" :change-is-back-arrow="changeIsBackArrow"  v-slot="{ Component }">
         <keep-alive exclude="ArticleView,FavoritesView">
           <component :is="Component" />

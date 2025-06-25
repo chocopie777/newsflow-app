@@ -60,9 +60,9 @@
     <v-col v-if="!store.state.categoriesNews.errorMessage && store.state.categoriesNews.articles.length < 1" offset="3" cols="6">
       <div class="text-center">В этой категории нет новостей</div>
     </v-col>
-    <v-row v-if="store.state.categoriesNews.errorMessage" class="ml-n10 mr-n10">
+    <v-row v-if="store.state.categoriesNews.errorMessage">
       <v-col cols="12">
-        <div class="bg-red text-center py-5 px-10">Допустимо 30 запросов к api в течении 15 минут(200 запросов в день) {{ store.state.categoriesNews.errorMessage }}</div>
+        <div class="bg-red text-center py-5 px-10 text-center" style="word-break: break-word;">Допустимо 30 запросов к api в течении 15 минут(200 запросов в день) {{ store.state.categoriesNews.errorMessage }}</div>
       </v-col>
     </v-row>
   </v-row>

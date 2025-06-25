@@ -49,9 +49,9 @@
         </div>
       </v-col>
     </v-row>
-    <v-row v-if="store.state.article.errorMessage" class="ml-n10 mr-n10 mt-10">
+    <v-row v-if="store.state.article.errorMessage">
       <v-col cols="12">
-        <div class="bg-red text-center py-5 px-10">{{ store.state.article.errorMessage }}</div>
+        <div class="bg-red text-center py-5 px-10 text-center" style="word-break: break-word;">{{ store.state.article.errorMessage }}</div>
       </v-col>
     </v-row>
   </template>
