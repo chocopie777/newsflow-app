@@ -78,7 +78,7 @@
 <script setup lang="ts">
 import { useStore } from "@/store";
 import { Article } from "@/types";
-import { defineProps, ref } from "vue";
+import { defineProps, onActivated, ref } from "vue";
 const store = useStore()
 const favorites = ref<Article[]>([])
 const searchValue = ref('')
@@ -94,6 +94,11 @@ const props = defineProps({
 
 props.changeAppBarTitle('Search for keywords')
 props.changeIsBackArrow(false)
+
+onActivated(() => {
+  props.changeAppBarTitle('Search for keywords')
+  props.changeIsBackArrow(false)
+})
 
 function favoriteHandler(data: Article) {
   try {

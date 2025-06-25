@@ -89,7 +89,7 @@ const props = defineProps({
 props.changeAppBarTitle(route.params.category + ' News')
 props.changeIsBackArrow(false)
 
-watch(() => route.params.category, () => {
+watch(() => route.params.category, async () => {
   store.dispatch('categoriesNews/getArticles', {category: route.params.category})
   props.changeAppBarTitle(route.params.category + ' News')
 })

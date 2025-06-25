@@ -1,9 +1,9 @@
 <template>
-  <v-row v-if="!store.state.lastNews.loading" class="mt-5 ml-5 mr-5">
-    <v-col v-if="store.state.lastNews.articles.length > 0" offset="3" cols="6">
+  <v-row v-if="!store.state.lastNews.loading" class="mt-5">
+    <v-col v-if="store.state.lastNews.articles.length > 0" offset="0" cols="12" sm="10" offset-sm="1" md="8" offset-md="2" lg="6" offset-lg="3">
       <v-card :ripple="false" height="150" class="ma-3 cursor-pointer d-flex" v-for="article of store.state.lastNews.articles"
         :key="article.article_id" @click="$router.push(`/article/${article.article_id}`)">
-        <v-avatar class="ma-3 align-self-center" rounded size="125">
+        <v-avatar class="ma-3 align-self-start align-self-sm-center avatar-response" rounded>
           <img v-if="article.image_url" :src="article.image_url" alt="image"
             style="object-fit: cover; width: 100%; height: 100%;">
           <div v-else class="position-relative h-100 w-100 d-flex justify-center align-center">
@@ -23,7 +23,7 @@
         <div class="flex-grow-1 justify-space-between flex-column d-flex" style="min-width: 0; overflow: hidden;">
           <div>
             <div class="position-relative">
-              <v-card-title class="text-wrap text-truncate" style="padding-right: 50px;">
+              <v-card-title class="text-wrap text-truncate text-body-1 text-sm-h6" style="padding-right: 50px;">
                 {{ article.title }}
               </v-card-title>
               <button v-if="favorites.some(obj => obj.article_id === article.article_id)" class="position-absolute"
@@ -43,15 +43,15 @@
                 </svg>
               </button>
             </div>
-            <v-card-subtitle class="text-wrap text-truncate">
+            <v-card-subtitle class="text-wrap text-truncate text-caption text-sm-body-2">
               {{ article.description }}
             </v-card-subtitle>
           </div>
-          <div class="d-flex justify-space-between">
-            <v-card-text class="font-weight-bold">
+          <div class="d-sm-flex justify-space-between">
+            <v-card-text class="font-weight-regular text-caption text-sm-body-2">
               {{ article.source_name }}
             </v-card-text>
-            <v-card-text class="text-right font-weight-bold">
+            <v-card-text class="pt-0 pt-sm-4 text-sm-right font-weight-regular text-caption text-sm-body-2">
               {{ article.pubDate }}
             </v-card-text>
           </div>
@@ -72,7 +72,7 @@
 <script setup lang="ts">
 import { useStore } from '@/store';
 import { Article } from '@/types';
-import { onMounted, ref } from 'vue';
+import { onActivated, onMounted, ref } from 'vue';
 import { defineProps } from "vue";
 const store = useStore()
 const favorites = ref<Article[]>([])
@@ -85,11 +85,17 @@ const props = defineProps({
 props.changeAppBarTitle('Last News')
 props.changeIsBackArrow(false)
 
+
 onMounted(() => {
   store.dispatch('lastNews/getArticles')
   if (localStorage.getItem('favorites')) {
     favorites.value = JSON.parse(localStorage.getItem('favorites') || '[]')
   }
+})
+
+onActivated(() => {
+  props.changeAppBarTitle('Last News')
+  props.changeIsBackArrow(false)
 })
 
 function favoriteHandler(data: Article) {
@@ -124,5 +130,15 @@ function favoriteHandler(data: Article) {
 
 .unselected-color {
   fill: #414B5A;
+}
+.avatar-response {
+  width: 125px;
+  height: 125px;
+}
+@media(max-width: 600px) {
+  .avatar-response {
+    width: 60px;
+    height: 60px;
+  }
 }
 </style>
