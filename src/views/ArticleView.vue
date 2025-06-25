@@ -1,14 +1,18 @@
 <template>
   <template v-if="!store.state.article.loading">
-    <v-row v-if="!store.state.article.errorMessage" class="w-100 h-50 rounded-b-xl overflow-hidden">
-      <v-col cols="6" offset="3">
+    <v-row v-if="!store.state.article.errorMessage">
+      <v-col offset="0" cols="12" sm="10" offset-sm="1" md="8" offset-md="2" lg="6" offset-lg="3">
         <div class="w-100 h-100 rounded-b-xl overflow-hidden">
-          <img v-if="store.state.article.article?.image_url" :src="((store.state.article.article?.image_url) as string)"
-            alt="image" style="object-fit: fill; width: 100%; height: 100%;">
-          <div v-else class="position-relative h-100 w-100 d-flex justify-center align-center">
+          <img 
+            v-if="store.state.article.article?.image_url" 
+            :src="store.state.article.article?.image_url" 
+            alt="image" 
+            style="width: 100%; height: 100%; object-fit: cover;"
+          >
+          <div v-else class="position-relative w-100 d-flex justify-center align-center" style="height: 400px;">
             <div class="bg-black opacity-30 w-100 h-100">
             </div>
-            <svg class="w-25 position-absolute" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <svg class="w-25 position-absolute" style="top:50%;transform: translateY(-50%)" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
               <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
               <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
               <g id="SVGRepo_iconCarrier">
@@ -22,8 +26,8 @@
       </v-col>
     </v-row>
     <v-row>
-      <v-col cols="6" offset="3">
-        <div v-if="!store.state.article.errorMessage" class="mt-5">
+      <v-col offset="0" cols="12" sm="10" offset-sm="1" md="8" offset-md="2" lg="6" offset-lg="3">
+        <div v-if="!store.state.article.errorMessage" class="px-3">
           <hr>
           <div class="mb-5 mt-5 flex">
             <div class="d-flex justify-space-between">
@@ -36,7 +40,7 @@
             </div>
             <hr>
           </div>
-          <h2 class="text-h4 font-weight-bold mb-5">
+          <h2 class="text-h4 font-weight-bold mb-5" style="word-break: break-word;">
             {{ store.state.article.article?.title }}
           </h2>
           <p class="text-subtitle-1">
@@ -77,4 +81,9 @@ onMounted(async () => {
 })
 </script>
 
-<style scoped></style>
+<style scoped>
+.rounded-b-xl {
+  overflow: hidden; /* Обрезает всё, что выходит за границы */
+  max-height: 50vh; /* Ограничивает максимальную высоту */
+}
+</style>
