@@ -98,6 +98,7 @@ onActivated(() => {
   props.changeIsBackArrow(false)
 })
 
+//обработчик нажатия кнопки для добавления/удаления избранного
 function favoriteHandler(data: Article) {
   try {
     if (localStorage.getItem('favorites')) {
