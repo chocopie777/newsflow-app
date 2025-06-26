@@ -28,7 +28,7 @@
 ## 🚀 Установка  
 ### Cоздать .env файл по примеру .env.example который есть в структуре проекта и внести туда api key из https://newsdata.io/
 ```bash
-git clone https://github.com/chocopie777/weather-app.git
+git clone https://github.com/chocopie777/newsflow-app.git
 
 npm install
 
