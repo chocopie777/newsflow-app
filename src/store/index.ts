@@ -5,6 +5,7 @@ import lastNews, { LastNewsState } from './modules/lastNews'
 import categoriesNews, { CategoriesNewsState } from './modules/categoriesNews'
 import searchNews, { SearchNewsState } from './modules/searchNews'
 
+//интерфейс корневого состояния
 export interface AppState {
   article: ArticleState;
   lastNews: LastNewsState;
@@ -24,6 +25,7 @@ export default createStore<AppState>({
   },
 })
 
+// использовать сразу типизированный store
 export function useStore() {
   return baseUseStore(key)
 }

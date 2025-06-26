@@ -75,24 +75,31 @@ import { Article } from '@/types';
 import { onActivated, onMounted, ref } from 'vue';
 import { defineProps } from "vue";
 const store = useStore()
+//хранение избранных
 const favorites = ref<Article[]>([])
 
+//получение пропсов
 const props = defineProps({
   changeAppBarTitle: {type:Function, required: true},
   changeIsBackArrow: {type:Function, required: true}
 })
 
+//изменить заголовок приложения
 props.changeAppBarTitle('Last News')
+//не отображать кнопку назад в приложении
 props.changeIsBackArrow(false)
 
 
 onMounted(() => {
+  //вызвать action модуля lastNews/getArticles
   store.dispatch('lastNews/getArticles')
+  // при монтировании загрузить избранное из LocalStorage
   if (localStorage.getItem('favorites')) {
     favorites.value = JSON.parse(localStorage.getItem('favorites') || '[]')
   }
 })
 
+//изменить заголовок и не отображать кнопку назад когда компонент кэшируемый с помощью keepalive будет снова отображен
 onActivated(() => {
   props.changeAppBarTitle('Last News')
   props.changeIsBackArrow(false)

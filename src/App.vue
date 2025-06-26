@@ -61,11 +61,12 @@ const appBarTitle = ref('');
 const drawer = ref(true)
 const isBackArrow = ref(false)
 
-
+// изменение заголовка приложения
 function changeAppBarTitle(newTitle: string) {
   appBarTitle.value = newTitle
 }
 
+// отображение кнопки назад в приложении
 function changeIsBackArrow(value: boolean) {
   isBackArrow.value = value
 }

@@ -83,17 +83,22 @@ import { defineProps } from "vue";
 import { Article } from '@/types';
 const route = useRoute()
 const store = useStore()
+//хранение избранных
 const favorites = ref<Article[]>([])
 
+//получение пропсов
 const props = defineProps({
   changeAppBarTitle: { type: Function, required: true },
   changeIsBackArrow: {type:Function, required: true}
 })
 
+//отобразить кнопку назад в приложении
 props.changeIsBackArrow(true)
 
 onMounted(async () => {
+  //вызвать action модуля article/getArticleById
   await store.dispatch('article/getArticleById', { id: route.params.id })
+  //изменить заголовок приложения
   await props.changeAppBarTitle(store.state.article.article?.title)
   // при монтировании загрузить избранное из LocalStorage
   if (localStorage.getItem('favorites')) {

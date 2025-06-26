@@ -77,22 +77,27 @@
 import { Article } from '@/types';
 import { onMounted, ref } from 'vue';
 import { defineProps } from "vue";
-
+//хранение избранных
 const favorites = ref<Article[]>([])
 
+//получение пропсов
 const props = defineProps({
   changeAppBarTitle: {type: Function, required: true},
   changeIsBackArrow: {type:Function, required: true}
 })
 
 onMounted(() => {
+  //изменить заголовок приложения
   props.changeAppBarTitle('Favorites')
+  //не отображать кнопку назад в приложении
   props.changeIsBackArrow(false)
+  // при монтировании загрузить избранное из LocalStorage
   if (localStorage.getItem('favorites') && favorites.value.length === 0) {
     favorites.value = JSON.parse(localStorage.getItem('favorites') || '[]')
   }
 })
 
+//обработчик нажатия кнопки для удаления избранного
 function favoriteHandler(data: Article) {
   try {
     favorites.value = JSON.parse(localStorage.getItem('favorites') || '[]')

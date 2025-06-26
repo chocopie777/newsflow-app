@@ -79,28 +79,38 @@ import { useRoute } from 'vue-router';
 import { defineProps } from "vue";
 const store = useStore()
 const route = useRoute()
+//хранение избранных
 const favorites = ref<Article[]>([])
 
+//получение пропсов
 const props = defineProps({
   changeAppBarTitle: {type: Function, required: true},
   changeIsBackArrow: {type:Function, required: true}
 })
 
+//изменение заголовка приложения
 props.changeAppBarTitle(route.params.category + ' News')
+//не отображать кнопку назад в приложении
 props.changeIsBackArrow(false)
 
+//отслеживание изменения категории
 watch(() => route.params.category, async () => {
+  //вызвать action модуля categoriesNews/getArticles'
   store.dispatch('categoriesNews/getArticles', {category: route.params.category})
+  //изменить заголовок приложения
   props.changeAppBarTitle(route.params.category + ' News')
 })
 
 onMounted(() => {
+  //вызвать action модуля categoriesNews/getArticles
   store.dispatch('categoriesNews/getArticles', {category: route.params.category})
+   // при монтировании загрузить избранное из LocalStorage
   if (localStorage.getItem('favorites')) {
     favorites.value = JSON.parse(localStorage.getItem('favorites') || '[]')
   }
 })
 
+//обработчик нажатия кнопки для добавления/удаления избранного
 function favoriteHandler(data: Article) {
   try {
     if (localStorage.getItem('favorites')) {

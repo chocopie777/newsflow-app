@@ -2,6 +2,7 @@ import { Article } from "@/types"
 import { ActionContext, Module } from "vuex"
 import { AppState } from ".."
 
+//интерфейс состояния модуля
 export interface ArticleState {
   article: Article | null,
   loading: boolean,
@@ -9,7 +10,9 @@ export interface ArticleState {
 }
 
 export default {
+  //изоляция модуля
   namespaced: true,
+  //состояние
   state(): ArticleState {
     return {
       article: null,
@@ -17,6 +20,7 @@ export default {
       errorMessage: null
     }
   },
+  //мутации изменяющие состояние
   mutations: {
     GET_ARTICLES_REQUEST: function (state: ArticleState) {
       state.loading = true
@@ -32,6 +36,7 @@ export default {
       state.errorMessage = payload.error
     },
   },
+  //экшны выполняющие асинхронные действия и вызывающие мутации
   actions: {
     getArticleById: async function (context: ActionContext<ArticleState, AppState>, payload: {id: string}) {
       try {

@@ -86,23 +86,29 @@ const store = useStore()
 const favorites = ref<Article[]>([])
 const searchValue = ref('')
 
+//получение избранных из LocalStorage
 if (localStorage.getItem('favorites')) {
   favorites.value = JSON.parse(localStorage.getItem('favorites') || '[]')
 } 
 
+//получение пропсов
 const props = defineProps({
   changeAppBarTitle: { type: Function, required: true },
   changeIsBackArrow: {type:Function, required: true}
 })
 
+//изменить заголовок приложения
 props.changeAppBarTitle('Search for keywords')
+//не отображать кнопку назад в приложении
 props.changeIsBackArrow(false)
 
+//изменить заголовок и не отображать кнопку назад когда компонент кэшируемый с помощью keepalive будет снова отображен
 onActivated(() => {
   props.changeAppBarTitle('Search for keywords')
   props.changeIsBackArrow(false)
 })
 
+//обработчик нажатия кнопки для добавления/удаления избранного
 function favoriteHandler(data: Article) {
   try {
     if (localStorage.getItem('favorites')) {
@@ -127,7 +133,9 @@ function favoriteHandler(data: Article) {
   }
 }
 
+//обработчик кнопки поиска
 function searchHandler() {
+  //вызвать action модуля searchNews/getArticles
   store.dispatch('searchNews/getArticles', { q: searchValue.value })
 }
 </script>

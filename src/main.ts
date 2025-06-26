@@ -6,7 +6,7 @@ import vuetify from './plugins/vuetify'
 import { loadFonts } from './plugins/webfontloader'
 
 loadFonts()
-
+// подключение vuetify, router, vuex
 createApp(App)
   .use(router)
   .use(store, key)

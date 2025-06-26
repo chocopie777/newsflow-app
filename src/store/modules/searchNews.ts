@@ -2,6 +2,7 @@ import { Article } from "@/types"
 import { Module } from "vuex"
 import { AppState } from ".."
 
+//интерфейс состояния модуля
 export interface SearchNewsState {
   articles: Article[],
   loading: boolean,
@@ -9,7 +10,9 @@ export interface SearchNewsState {
 }
 
 export default {
+  //изоляция модуля
   namespaced: true,
+  //состояние
   state(): SearchNewsState {
     return {
       articles: [],
@@ -17,6 +20,7 @@ export default {
       errorMessage: null
     }
   },
+  //мутации изменяющие состояние
   mutations: {
     GET_ARTICLES_REQUEST: function(state){
       state.loading = true
@@ -32,6 +36,7 @@ export default {
       state.errorMessage = payload.error
     },
   },
+  //экшны выполняющие асинхронные действия и вызывающие мутации
   actions: {
     getArticles: async function(context, payload) {
       try {
